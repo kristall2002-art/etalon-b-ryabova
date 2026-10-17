@@ -167,13 +167,11 @@ html.js .sec-hero:not(.go) .rv{opacity:0;translate:0 18px;animation:heroSafe .01
 .hdr::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent)}
 body[data-sec="0"] .hdr{transform:translateY(-105%);opacity:0;visibility:hidden;pointer-events:none;transition:transform .45s var(--ease),opacity .3s ease,visibility 0s linear .45s}
 .hdr-in{max-width:1440px;padding:0 28px;gap:18px}
-.brand{gap:12px}
-.brand-s{display:none}
-.brand-t{display:flex}
+.brand-s{color:rgba(255,255,255,.78)}
 .brand-n{font-size:16px;font-weight:600;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.4)}
-.mono{background:rgba(var(--spot),.92);color:#2a1d07}
 .nav{gap:2px}
-.nav-a{color:#fff;opacity:.9;font-size:14.5px;padding:10px 12px}
+.nav-a{color:#fff;opacity:.9;font-size:14.5px;padding:10px 12px;white-space:nowrap}
+.brand{flex:none}
 .nav-a:hover,.nav-a.cur,.nav > li.open > .nav-a{background:rgba(255,255,255,.14);opacity:1}
 .nav-a.cur{box-shadow:inset 0 -2px 0 rgba(var(--spot),.95)}
 .hdr-tools{margin-left:10px;gap:10px}
@@ -300,12 +298,15 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
   .hdr-tel{width:44px;padding:0;justify-content:center}
   .hdr-tel span{display:none}
   .hdr-tel:hover{background:rgba(255,255,255,.14)}
+  .nav-a{padding:10px 9px}
 }
+/* на ноутбуках поуже телефон на плашке не помещается (он есть в нижней панели и в меню) */
+@media (max-width:1366px){.hdr-tel{display:none}}
 @media (max-width:860px){
   .hdr-a11y{display:none}
   .mmenu .mm-tools{display:grid}
 }
-@media (max-width:1100px){
+@media (max-width:1279px){
   .nav,.hdr-tel{display:none}
   .burger{display:grid}
   .hdr-book{display:inline-flex}
@@ -345,7 +346,6 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
   .dots{right:-15px}
 }
 @media (max-width:600px){
-  .mono{display:none}
   .hdr-in{padding:0 12px;gap:8px}
   .brand-n{font-size:15px}
   .hdr-book{padding:0 14px;font-size:14px}
@@ -355,6 +355,9 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
   .bi{font-size:12px;letter-spacing:-.03em;padding:6px 0}
   .bi span{overflow:visible;text-overflow:clip}
   .brand-t{display:flex}
+  .brand{flex:1 1 0;min-width:0}
+  .brand-s{font-size:9px;letter-spacing:.14em}
+  .brand-n{font-size:12.5px;white-space:normal;line-height:1.12}
   .mmenu .mmenu-foot .btn{flex:1 1 100%}
 }
 @media (max-height:700px) and (min-width:768px){
