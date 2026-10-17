@@ -587,3 +587,25 @@ html[data-hc="1"] .btn-glass.btn-book *,html[data-hc="1"] .sec:not(.sec-hero) .b
 @media (max-width:480px){
   .info-i p,.info-i li{text-align:left}
 }
+
+/* ==========================================================================
+   Обратный звонок: плашка переворачивается (3D flip) в форму; лицевая и обратная стороны лежат в одной
+   ячейке сетки, поэтому высота плашки не прыгает. Переворот: поворот до ребра, смена стороны, поворот обратно.
+   ========================================================================== */
+.flipc{display:grid;transform-origin:50% 50%;will-change:auto}
+.flipc > .flip-front,.flipc > .flip-back{grid-area:1/1;min-width:0;align-self:center}
+/* в окне высота меняется в момент, когда плашка стоит ребром: показываем только одну сторону */
+.flipc-swap:not(.show-back) > .flip-back,.flipc-swap.show-back > .flip-front{display:none}
+.flipc:not(.show-back) > .flip-back,.flipc.show-back > .flip-front{visibility:hidden;pointer-events:none}
+.flipc > .flip-back h3{font-size:19px;font-weight:600}
+.flipc > .flip-back .fdesc{color:var(--muted);font-size:13.5px;margin-top:6px}
+.bk-opt{font-family:inherit;cursor:pointer;width:100%}
+button.bk-opt{appearance:none;-webkit-appearance:none}
+.fld label .opt{font-weight:400;opacity:.72}
+.cb-actions{display:grid;grid-template-columns:auto 1fr;gap:10px;margin-top:4px}
+.cb-actions .btn{min-height:46px;padding:0 14px;font-size:14.5px;gap:8px}
+.cb-actions .btn span{white-space:normal;text-align:center;line-height:1.2}
+.flipc .fok{display:none}
+.flipc .fok.show{display:block}
+@media (max-width:360px){.cb-actions{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.flipc{will-change:auto}}
