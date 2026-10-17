@@ -356,6 +356,18 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
 @media (max-width:860px){
   .mmenu .mm-tools{display:grid}
 }
+/* таджикская и киргизская версии: пункты меню длиннее — телефон на плашке только значком до 1680 px, меню-бургер на экранах до 1320 px */
+@media screen and (min-width:1440px) and (max-width:1679px){
+  html[lang="tg"] .hdr-tel,html[lang="ky"] .hdr-tel{width:44px;padding:0;justify-content:center}
+  html[lang="tg"] .hdr-tel span,html[lang="ky"] .hdr-tel span{display:none}
+}
+@media screen and (min-width:1280px) and (max-width:1319px){
+  html[lang="tg"] .nav,html[lang="ky"] .nav,html[lang="tg"] .hdr-tel,html[lang="ky"] .hdr-tel{display:none}
+  html[lang="tg"] .burger,html[lang="ky"] .burger{display:grid}
+  html[lang="tg"] .hdr-book,html[lang="ky"] .hdr-book{display:inline-flex}
+  html[lang="tg"] .hdr-tools,html[lang="ky"] .hdr-tools{margin-left:auto}
+  html[lang="tg"] .hdr-in,html[lang="ky"] .hdr-in{padding:0 18px}
+}
 @media screen and (max-width:1279px){
   .nav,.hdr-tel{display:none}
   .burger{display:grid}
@@ -667,3 +679,13 @@ button.bk-opt{appearance:none;-webkit-appearance:none}
 .flipc .fok.show{display:block}
 @media (max-width:360px){.cb-actions{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){.flipc{will-change:auto}}
+
+/* ==========================================================================
+   Языковые версии: шрифты для китайского, длинные слова не вылезают из плашек
+   ========================================================================== */
+html[lang="zh"]{--font:"Inter","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC",sans-serif;
+  --serif:"Playfair Display","Songti SC","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif}
+html:not([lang="ru"]) :is(.svc,.step,.rev,.cred,.fq,.cbox,.sec-head,.chips li,.rsum,.rate-chip,.status,.foot,.hero-plq){overflow-wrap:break-word}
+.map-actions .btn{flex:1 1 9.5em}   /* короткие подписи (китайский) не схлопываются до буквы в столбик: на узкой плашке кнопки встают друг под другом */
+html:not([lang="ru"]) :is(.rsum,.map-actions) .btn span{overflow-wrap:anywhere}
+html:not([lang="ru"]) .rsum .btn{white-space:normal;text-align:center;line-height:1.25;padding-top:9px;padding-bottom:9px}
