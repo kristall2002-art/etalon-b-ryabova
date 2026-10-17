@@ -438,17 +438,119 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
 }
 
 /* ==========================================================================
-   Тёмная тема (кнопка-луна на плашке). По умолчанию (data-theme="light") вид прежний;
-   тёмная — тот же дизайн, но глубже: фото экранов темнее, стекло плотнее, окна и формы тёмные.
-   Первый экран с видео и плашкой в обеих темах одинаковый.
+   Две темы (кнопка солнце/луна на плашке). По умолчанию data-theme="light" (как и было).
+   Светлая: светлое матовое стекло плашек, окна и формы светлые, текст тёмный, фото экранов
+   посветлены и приглушены лёгкой вуалью. Тёмная: глубокий почти чёрный фон, плотное тёмное стекло,
+   светлый текст, фото сильно затемнены. Первый экран (видео, облака, чайки, слово) читается в обеих:
+   в светлой плашка светлая с тёмным текстом, в тёмной — тёмная со светлым.
+   Выше (без data-theme) — базовый вид «тёмное стекло»; светлая тема переопределяет его ниже.
    ========================================================================== */
-html[data-theme="dark"]{--glass:rgba(0,0,0,.6)}
-html[data-theme="dark"] .sec-hero{--glass:rgba(0,0,0,.4)}
-html[data-theme="dark"] .sec-bg::after{background:rgba(0,0,0,.72)}
-html[data-theme="dark"] .hdr,html[data-theme="dark"] .bar{background:rgba(8,6,3,.78)}
-html[data-theme="dark"] .mmenu{background:rgba(10,8,5,.97)}
-html[data-theme="dark"] .mega,html[data-theme="dark"] .lang-dd{background:rgba(10,8,5,.96)}
-html[data-theme="dark"] .fld input,html[data-theme="dark"] .fld select,html[data-theme="dark"] .fld textarea{background:rgba(0,0,0,.5)}
+/* ----- тёмная: глубже ----- */
+html[data-theme="dark"]{--glass:rgba(9,9,12,.74);--glass-blur:6px}
+html[data-theme="dark"] .sec-hero{--glass:rgba(6,7,10,.52);--glass-blur:6px}
+html[data-theme="dark"] .sec:not(.sec-hero),html[data-theme="dark"] .sec-bg{background:#070707}
+html[data-theme="dark"] .sec-bg::after{background:rgba(3,4,7,.86)}
+html[data-theme="dark"] .hdr,html[data-theme="dark"] .bar{background:rgba(5,5,7,.86)}
+html[data-theme="dark"] .mmenu{background:rgba(6,6,8,.98)}
+html[data-theme="dark"] .mega,html[data-theme="dark"] .lang-dd{background:rgba(7,7,9,.97)}
+html[data-theme="dark"] .fld input,html[data-theme="dark"] .fld select,html[data-theme="dark"] .fld textarea{background:rgba(0,0,0,.55)}
+
+/* ----- светлая ----- */
+html[data-theme="light"]:not([data-hc="1"]){--glass:rgba(255,255,255,.7);--glass-blur:8px}
+html[data-theme="light"]:not([data-hc="1"]) .sec-hero{--glass:rgba(255,253,248,.66);--glass-blur:12px}
+html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero),html[data-theme="light"]:not([data-hc="1"]) .hdr,html[data-theme="light"]:not([data-hc="1"]) .bar,html[data-theme="light"]:not([data-hc="1"]) .mmenu{
+  --card:rgba(255,255,255,.74); --card-rgb:255,255,255;
+  --text:#1b160e; --muted:#4d4332;
+  --line:rgba(70,50,15,.30); --line2:rgba(70,50,15,.17);
+  --accent:#7a5718; --accent-d:#5a3d0b; --accent-l:#a3813f; --accent-soft:rgba(122,87,24,.13);
+  --bg:rgba(255,255,255,.5); --bg2:transparent; --bg3:rgba(70,50,15,.08);
+  --on-accent:#fff;
+  --shadow:0 1px 12px rgba(70,50,15,.14); --shadow-lg:0 18px 50px rgba(70,50,15,.26);
+  --ok:#1d7443; --bad:#b0332a;
+  color:#1b160e
+}
+html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero),html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) .sec-bg{background:#ece5d6}
+html[data-theme="light"]:not([data-hc="1"]) .sec-bg::after{background:rgba(250,246,238,.62)}
+html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) .sec-scroll{text-shadow:none}
+html[data-theme="light"]:not([data-hc="1"]) .glass,
+html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) :is(.sec-head,.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.quote,.ilink,.chips li,.foot,.rate-chip){
+  box-shadow:0 8px 28px rgba(70,50,15,.16),inset 0 1px 0 rgba(255,255,255,.8)
+}
+html[data-theme="light"]:not([data-hc="1"]) .glass::after,
+html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) :is(.sec-head,.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.quote,.ilink,.chips li,.foot,.rate-chip)::after{
+  background:
+    radial-gradient(230px circle at var(--x,50%) var(--y,50%),rgba(214,150,40,calc(var(--hl,0)*1)),rgba(var(--spot),calc(var(--hl,0)*.7)) 38%,transparent 72%),
+    linear-gradient(160deg,rgba(255,255,255,.95) 0%,rgba(120,88,30,.22) 28%,rgba(120,88,30,.12) 62%,rgba(255,255,255,.9) 100%)
+}
+html[data-theme="light"]:not([data-hc="1"]) .glow:hover{box-shadow:0 24px 54px rgba(70,50,15,.3),0 0 34px rgba(var(--spot),.3)}
+html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) .sec-head .demo-note{background:rgba(70,50,15,.07)}
+/* первый экран */
+html[data-theme="light"]:not([data-hc="1"]) .hero-plq{color:#1b160e;text-shadow:none}
+html[data-theme="light"]:not([data-hc="1"]) .hero-plq .kicker{color:#7a5718}
+html[data-theme="light"]:not([data-hc="1"]) .hero-plq .kicker::before{background:#7a5718}
+html[data-theme="light"]:not([data-hc="1"]) .hw{color:#17120a;text-shadow:0 1px 0 rgba(255,255,255,.5)}
+html[data-theme="light"]:not([data-hc="1"]) .hn{color:#4b3a18}
+html[data-theme="light"]:not([data-hc="1"]) .hero-lead{color:rgba(27,22,14,.92)}
+html[data-theme="light"]:not([data-hc="1"]) .hero-addr .addr-link{color:#1b160e;border-bottom-color:rgba(27,22,14,.45)}
+html[data-theme="light"]:not([data-hc="1"]) .hero-addr .addr-link:hover{color:#7a5718}
+html[data-theme="light"]:not([data-hc="1"]) .btn-glass{color:#1b160e}
+html[data-theme="light"]:not([data-hc="1"]) .btn-glass:hover{color:#1b160e}
+html[data-theme="light"]:not([data-hc="1"]) .btn-glass.btn-book,html[data-theme="light"]:not([data-hc="1"]) .btn-glass.btn-book:hover{color:#2a1d07}
+html[data-theme="light"]:not([data-hc="1"]) .hero-plq .status{background:rgba(255,255,255,.6);border-color:rgba(70,50,15,.25);color:#1b160e}
+/* шапка, нижняя полоса, меню */
+html[data-theme="light"]:not([data-hc="1"]) .hdr,html[data-theme="light"]:not([data-hc="1"]) .bar{background:rgba(255,253,248,.82)}
+html[data-theme="light"]:not([data-hc="1"]) .hdr::after,html[data-theme="light"]:not([data-hc="1"]) .bar::before{background:linear-gradient(90deg,transparent,rgba(90,65,25,.35),transparent)}
+html[data-theme="light"]:not([data-hc="1"]) .brand-s{color:rgba(60,45,20,.72)}
+html[data-theme="light"]:not([data-hc="1"]) .brand-n{color:#1b160e;text-shadow:none}
+html[data-theme="light"]:not([data-hc="1"]) .nav-a{color:#1b160e}
+html[data-theme="light"]:not([data-hc="1"]) .nav-a:hover,html[data-theme="light"]:not([data-hc="1"]) .nav-a.cur,html[data-theme="light"]:not([data-hc="1"]) .nav > li.open > .nav-a{background:rgba(70,50,15,.09)}
+html[data-theme="light"]:not([data-hc="1"]) .nav-a.cur{box-shadow:inset 0 -2px 0 #c08a28}
+html[data-theme="light"]:not([data-hc="1"]) .hdr .tool{color:#1b160e}
+html[data-theme="light"]:not([data-hc="1"]) .hdr .tool:hover{background:rgba(70,50,15,.09)}
+html[data-theme="light"]:not([data-hc="1"]) .hdr-tel{color:#1b160e}
+html[data-theme="light"]:not([data-hc="1"]) .hdr-tel:hover{color:#7a5718}
+html[data-theme="light"]:not([data-hc="1"]) .hdr-a11y{border-left-color:rgba(70,50,15,.28)}
+html[data-theme="light"]:not([data-hc="1"]) .hdr #hcBtn[aria-pressed="true"]{background:rgba(192,138,40,.22);color:#5a3d0b}
+html[data-theme="light"]:not([data-hc="1"]) .mega,html[data-theme="light"]:not([data-hc="1"]) .lang-dd{background:rgba(255,252,246,.97);border-color:rgba(70,50,15,.2);color:#1b160e}
+html[data-theme="light"]:not([data-hc="1"]) .mega-it:hover,html[data-theme="light"]:not([data-hc="1"]) .lang-dd a:hover,html[data-theme="light"]:not([data-hc="1"]) .lang-dd button:hover{background:rgba(70,50,15,.08)}
+html[data-theme="light"]:not([data-hc="1"]) .lang-dd a.cur{color:#7a5718}
+html[data-theme="light"]:not([data-hc="1"]) .bi{color:#1b160e}
+html[data-theme="light"]:not([data-hc="1"]) .bi:hover{background:rgba(70,50,15,.09)}
+html[data-theme="light"]:not([data-hc="1"]) .bi.cur{color:#7a5718}
+html[data-theme="light"]:not([data-hc="1"]) .mmenu{background:rgba(255,252,246,.98);color:#1b160e}
+html[data-theme="light"]:not([data-hc="1"]) .mmenu .macc-list button:hover{background:rgba(70,50,15,.08)}
+html[data-theme="light"]:not([data-hc="1"]) .mmenu .btn-ghost{border-color:rgba(70,50,15,.4);color:#1b160e}
+html[data-theme="light"]:not([data-hc="1"]) .mmenu .mm-row a,html[data-theme="light"]:not([data-hc="1"]) .mmenu .mm-row button,html[data-theme="light"]:not([data-hc="1"]) .mmenu .mm-tools button{border-color:rgba(70,50,15,.3)}
+html[data-theme="light"]:not([data-hc="1"]) .mmenu .mm-row a.cur{color:#7a5718;border-color:#c08a28}
+html[data-theme="light"]:not([data-hc="1"]) .mmenu .mm-tools{border-color:rgba(192,138,40,.5);background:rgba(70,50,15,.06)}
+html[data-theme="light"]:not([data-hc="1"]) .mmenu .mm-tools button{background:rgba(255,255,255,.7)}
+html[data-theme="light"]:not([data-hc="1"]) .mmenu .mm-tools button[aria-pressed="true"]{border-color:#c08a28;color:#5a3d0b;background:rgba(192,138,40,.2)}
+html[data-theme="light"]:not([data-hc="1"]) .dots button::after{background:#3a2d12;opacity:.5;box-shadow:0 0 0 1px rgba(255,255,255,.7)}
+html[data-theme="light"]:not([data-hc="1"]) .dots button.cur::after{background:rgb(var(--spot));opacity:1;box-shadow:0 0 0 1px rgba(90,65,25,.5)}
+html[data-theme="light"]:not([data-hc="1"]) body[data-sec="0"] .dots button::after{background:#fff;opacity:.7;box-shadow:0 0 0 1px rgba(0,0,0,.3)}
+html[data-theme="light"]:not([data-hc="1"]) body[data-sec="0"] .dots button.cur::after{background:rgb(var(--spot));opacity:1}
+/* содержимое экранов */
+html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) .kicker{color:#7a5718}
+html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) .kicker::before{background:#7a5718}
+html[data-theme="light"]:not([data-hc="1"]) .svc .cic,html[data-theme="light"]:not([data-hc="1"]) .cred .cic,html[data-theme="light"]:not([data-hc="1"]) .cl .cic,html[data-theme="light"]:not([data-hc="1"]) .mega-it .cic{background:rgba(122,87,24,.12);color:#5a3d0b}
+html[data-theme="light"]:not([data-hc="1"]) .svc small{color:rgba(27,22,14,.78)}
+html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) .about-txt .quote{background:rgba(70,50,15,.07)}
+html[data-theme="light"]:not([data-hc="1"]) .step-n{background:rgba(255,255,255,.75);border-color:rgba(192,138,40,.9);color:#5a3d0b}
+html[data-theme="light"]:not([data-hc="1"]) .step p{color:rgba(27,22,14,.86)}
+html[data-theme="light"]:not([data-hc="1"]) .rsum .big{color:#5a3d0b}
+html[data-theme="light"]:not([data-hc="1"]) .rev p{color:#1b160e}
+html[data-theme="light"]:not([data-hc="1"]) .fq-a p{color:rgba(27,22,14,.86)}
+html[data-theme="light"]:not([data-hc="1"]) .fq > button .pl{border-color:rgba(70,50,15,.4)}
+html[data-theme="light"]:not([data-hc="1"]) .fld input,html[data-theme="light"]:not([data-hc="1"]) .fld select,html[data-theme="light"]:not([data-hc="1"]) .fld textarea{background:rgba(255,255,255,.88);color:#1b160e;border-color:rgba(70,50,15,.32)}
+html[data-theme="light"]:not([data-hc="1"]) .fld input::placeholder,html[data-theme="light"]:not([data-hc="1"]) .fld textarea::placeholder{color:rgba(27,22,14,.5)}
+html[data-theme="light"]:not([data-hc="1"]) .map{background:rgba(255,255,255,.45)}
+html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) .btn-ghost{background:rgba(255,255,255,.62);color:#1b160e;border-color:rgba(70,50,15,.38)}
+html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) .btn-ghost:hover{border-color:#c08a28;color:#5a3d0b}
+html[data-theme="light"]:not([data-hc="1"]) .info-links .ilink{color:#1b160e}
+html[data-theme="light"]:not([data-hc="1"]) .rate-chip{color:#1b160e}
+html[data-theme="light"]:not([data-hc="1"]) .foot a{color:#1b160e}
+html[data-theme="light"]:not([data-hc="1"]) .sec :focus-visible,html[data-theme="light"]:not([data-hc="1"]) .hdr :focus-visible,html[data-theme="light"]:not([data-hc="1"]) .bar :focus-visible,html[data-theme="light"]:not([data-hc="1"]) .mmenu :focus-visible{outline-color:#a06a10}
+html[data-theme="light"]:not([data-hc="1"]) .pay-pill:not(.pay-logo){background:rgba(255,255,255,.7)}
 
 /* ---------- режим для слабовидящих: чистый чёрный экран без стекла ---------- */
 html[data-hc="1"] .sec:not(.sec-hero){background:#000}
