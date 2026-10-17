@@ -637,13 +637,22 @@ button.bk-opt{appearance:none;-webkit-appearance:none}
 .fok .mail-addr.in-ok{margin-top:8px}
 .fok .mail-addr b{color:inherit}
 .cb-actions.solo{grid-template-columns:1fr}
+/* второй телефон в списке контактов: подпись под номером */
+.cl .tel2{margin-top:6px}
+.cl a.tel-b{display:inline-block;padding:7px 0;margin:-7px 0}
+.cl a.tel-b:hover{color:var(--accent-d)}
+.cl .tel-note{display:block;font-size:12.5px;font-weight:400;color:var(--muted);line-height:1.3;margin-top:1px}
 /* обратная сторона «Позвонить»: крупный номер, кнопка, часы приёма */
 .fb-view[hidden]{display:none}
 /* размер номера считается от ширины самой плашки (container query): не вылезает ни на узком телефоне, ни при «А+» */
 .fb-view[data-view="tel"]{container-type:inline-size}
 .tel-num{display:block;margin-top:14px;text-align:center;font-family:var(--serif);font-weight:600;font-size:clamp(18px,9cqi,34px);letter-spacing:.01em;line-height:1.15;color:var(--text);white-space:nowrap}
 .tel-num:hover{color:var(--accent-d)}
-.tel-call{width:100%;margin-top:12px}
+.tel-num2{display:flex;flex-direction:column;align-items:center;gap:1px;margin-top:4px;padding:8px 0;color:var(--text);line-height:1.25;text-align:center}
+.tel-num2 b{font-size:17px;font-weight:600;white-space:nowrap}
+.tel-num2 span{font-size:12.5px;color:var(--muted)}
+.tel-num2:hover b{color:var(--accent-d)}
+.tel-call{width:100%;margin-top:8px}
 .tel-hours{margin-top:12px}
 .tel-hours > b{display:block;font-size:13px;font-weight:500;color:var(--muted)}
 .hours-mini{margin-top:2px;font-size:13.5px}
