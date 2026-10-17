@@ -66,7 +66,7 @@
     place(el, e.clientX, e.clientY);
     el.classList.remove('tap'); void el.offsetWidth; el.classList.add('tap');
     clearTimeout(el._tapT);
-    el._tapT = setTimeout(function () { el.classList.remove('tap'); }, 700);
+    el._tapT = setTimeout(function () { el.classList.remove('tap'); }, el.closest('#contacts') ? 1450 : 700);   // в «Контактах» свечение дольше
   }, { passive: true });
 
   /* ---------- видео первого экрана: играет только на первом экране ---------- */

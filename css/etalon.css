@@ -86,6 +86,20 @@
 @media (hover:hover) and (pointer:fine){
   .glow:hover{scale:var(--hov);z-index:6;box-shadow:0 24px 54px rgba(0,0,0,.5),0 0 34px rgba(var(--spot),.2)}
 }
+/* ---------- «Контакты» («Как нас найти»): плашки при наведении и касании загораются жёлтым — яркая рамка и мягкое
+   свечение вокруг; размер не меняется (никаких увеличений и сдвигов раскладки), видно в обеих темах ---------- */
+:root{--gy-ring:255,208,80;--gy-glow:255,200,64}
+html[data-theme="light"]{--gy-ring:232,154,0;--gy-glow:255,186,30}
+#contacts .glow{--gy:0 0 0 2.5px rgba(var(--gy-ring),.98),0 0 22px 4px rgba(var(--gy-glow),.66),0 0 58px 14px rgba(var(--gy-glow),.32),0 8px 30px rgba(0,0,0,.14);
+  --gy0:0 0 0 0 rgba(var(--gy-ring),0),0 0 0 0 rgba(var(--gy-glow),0),0 0 0 0 rgba(var(--gy-glow),0),0 8px 30px rgba(0,0,0,.14)}
+@media (hover:hover) and (pointer:fine){
+  #contacts .glow:hover{scale:1;box-shadow:var(--gy)}
+  /* заголовок с рейтингом: когда курсор на значке рейтинга, светится только значок */
+  #contacts .sec-head:has(.rate-chip:hover):hover{box-shadow:var(--gy0)}
+}
+#contacts .glow.tap{animation:cGlowTap 1.4s ease-out,glowHl .62s ease-out}
+@keyframes cGlowTap{0%{box-shadow:var(--gy0)}14%,62%{box-shadow:var(--gy)}100%{box-shadow:var(--gy0)}}
+html[data-hc="1"] #contacts .glow:hover{outline:3px solid #ffd400;outline-offset:2px}
 /* крупные плашки берут нижнюю границу 1,03: 3,5 % от 600 px — это уже 20 px */
 .hero-plq,.about-txt,.sec-head,.cbox{--hov:1.03}
 
