@@ -637,6 +637,18 @@ button.bk-opt{appearance:none;-webkit-appearance:none}
 .fok .mail-addr.in-ok{margin-top:8px}
 .fok .mail-addr b{color:inherit}
 .cb-actions.solo{grid-template-columns:1fr}
+/* обратная сторона «Позвонить»: крупный номер, кнопка, часы приёма */
+.fb-view[hidden]{display:none}
+/* размер номера считается от ширины самой плашки (container query): не вылезает ни на узком телефоне, ни при «А+» */
+.fb-view[data-view="tel"]{container-type:inline-size}
+.tel-num{display:block;margin-top:14px;text-align:center;font-family:var(--serif);font-weight:600;font-size:clamp(18px,9cqi,34px);letter-spacing:.01em;line-height:1.15;color:var(--text);white-space:nowrap}
+.tel-num:hover{color:var(--accent-d)}
+.tel-call{width:100%;margin-top:12px}
+.tel-hours{margin-top:12px}
+.tel-hours > b{display:block;font-size:13px;font-weight:500;color:var(--muted)}
+.hours-mini{margin-top:2px;font-size:13.5px}
+.hours-mini td{padding:5px 4px}
+.flipc .cb-actions.solo{margin-top:12px}
 .mbox-mail .fg{margin-top:10px}
 /* высокое окно (телефон): крестик остаётся на месте, прокручивается только форма */
 .mbox-mail{overflow:hidden;display:flex;flex-direction:column;padding:0}
