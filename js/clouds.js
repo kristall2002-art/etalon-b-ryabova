@@ -115,10 +115,12 @@
   var speed = (mobile ? 3 : 1) * (reduced ? .5 : 1);
   var T0 = performance.now(), last = 0, raf = 0, ready = false;
 
+  function pageZoom() { return parseFloat(getComputedStyle(document.documentElement).zoom) || 1; }   /* А+: страница в CSS zoom */
   function size() {
+    var z = pageZoom();
     var w = Math.max(2, home ? home.clientWidth : innerWidth), h = Math.max(2, home ? home.clientHeight : innerHeight);
     var frac = cv.clientHeight / h || .58;
-    var cw = Math.max(2, Math.round(cv.clientWidth * scale)), ch = Math.max(2, Math.round(cv.clientHeight * scale));
+    var cw = Math.max(2, Math.round(cv.clientWidth * scale * z)), ch = Math.max(2, Math.round(cv.clientHeight * scale * z));
     if (cv.width !== cw || cv.height !== ch) { cv.width = cw; cv.height = ch; }
     gl.viewport(0, 0, cw, ch);
     gl.uniform2f(U.res, cw, ch);

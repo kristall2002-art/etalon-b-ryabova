@@ -35,7 +35,8 @@
     W = Math.max(2, home.clientWidth); H = Math.max(2, home.clientHeight);
     mobile = W <= 768;
     BAND = Math.round(H * (mobile ? .40 : .46));
-    dpr = Math.min(window.devicePixelRatio || 1, weak ? 1.5 : 2);
+    var z = parseFloat(getComputedStyle(document.documentElement).zoom) || 1;   /* А+: страница в CSS zoom */
+    dpr = Math.min((window.devicePixelRatio || 1) * z, weak ? 1.5 : 2);
     var cw = Math.round(W * dpr), ch = Math.round(BAND * dpr);
     if (cv.width !== cw || cv.height !== ch) { cv.width = cw; cv.height = ch; }
     cv.style.height = BAND + 'px';
@@ -46,7 +47,7 @@
     var hr = home.getBoundingClientRect();
     if (plq) {
       var r = plq.getBoundingClientRect();
-      plqL = r.left - hr.left; plqR = r.right - hr.left; plqT = r.top - hr.top;
+      plqL = (r.left - hr.left) / z; plqR = (r.right - hr.left) / z; plqT = (r.top - hr.top) / z;
     } else { plqL = plqR = W; plqT = H; }
   }
 

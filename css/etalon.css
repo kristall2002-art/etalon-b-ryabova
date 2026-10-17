@@ -122,10 +122,10 @@ html.js .sec-hero:not(.go) .rv{opacity:0;translate:0 18px;animation:heroSafe .01
 }
 .hero-clouds.on{opacity:1}
 
-.sec-hero .sec-scroll{position:relative;z-index:1;padding:26px clamp(20px,3.4vw,64px);display:flex;flex-direction:column}
+.sec-hero .sec-scroll{position:relative;z-index:1;padding:26px clamp(20px,calc(3.4*var(--vwu,1vw)),64px);display:flex;flex-direction:column}
 .sec-hero .wrap{max-width:none;margin:auto 0}
 .hero-plq{
-  --plq-w:clamp(500px,38vw,660px);--plq-pad:clamp(24px,2.4vw,36px);
+  --plq-w:clamp(500px,calc(38*var(--vwu,1vw)),660px);--plq-pad:clamp(24px,calc(2.4*var(--vwu,1vw)),36px);
   width:min(100%,var(--plq-w));padding:var(--plq-pad);border-radius:28px;
   color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5);
   animation:plqIn .9s ease both
@@ -139,8 +139,8 @@ html.js .sec-hero:not(.go) .rv{opacity:0;translate:0 18px;animation:heroSafe .01
   font-size:calc((var(--plq-w) - 2 * var(--plq-pad)) / 4.9);
   text-shadow:0 2px 22px rgba(0,0,0,.35),0 1px 2px rgba(0,0,0,.4);white-space:nowrap
 }
-.hn{display:block;margin-top:6px;font-family:var(--serif);font-weight:500;font-size:clamp(20px,1.9vw,28px);line-height:1.2;color:#f7ecd2}
-.hero-lead{margin-top:16px;max-width:none;font-size:clamp(15px,1.15vw,17px);line-height:1.5;color:rgba(255,255,255,.94)}
+.hn{display:block;margin-top:6px;font-family:var(--serif);font-weight:500;font-size:clamp(20px,calc(1.9*var(--vwu,1vw)),28px);line-height:1.2;color:#f7ecd2}
+.hero-lead{margin-top:16px;max-width:none;font-size:clamp(15px,calc(1.15*var(--vwu,1vw)),17px);line-height:1.5;color:rgba(255,255,255,.94)}
 .hero-addr{margin-top:10px;font-size:14px}
 .hero-addr .addr-link{color:#fff;border-bottom-color:rgba(255,255,255,.55)}
 .hero-addr .addr-link:hover{color:#f6e6bd}
@@ -232,7 +232,7 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
    ========================================================================== */
 .sec:not(.sec-hero) .kicker{color:#f1deb0}
 .sec:not(.sec-hero) .kicker::before{background:#f1deb0}
-.sec:not(.sec-hero) .h2{font-size:clamp(26px,3vw,38px)}
+.sec:not(.sec-hero) .h2{font-size:clamp(26px,calc(3*var(--vwu,1vw)),38px)}
 .sec:not(.sec-hero) .svc:hover{transform:none;border-color:transparent}
 .svc .cic,.cred .cic,.cl .cic,.mega-it .cic{background:rgba(255,255,255,.14);color:#f6e9c8}
 .svc small{color:rgba(255,255,255,.8)}
@@ -359,8 +359,8 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
   .hero-plq{--plq-pad:18px;width:100%;padding:18px 18px 20px;border-radius:22px}
   .hero-plq .kicker{font-size:11.5px;letter-spacing:.1em}
   .hero-h1{margin-top:10px}
-  .hw{font-size:clamp(44px,16.2vw,76px)}
-  .hn{font-size:clamp(19px,5.4vw,26px)}
+  .hw{font-size:clamp(44px,calc(16.2*var(--vwu,1vw)),76px)}
+  .hn{font-size:clamp(19px,calc(5.4*var(--vwu,1vw)),26px)}
   .hero-lead{margin-top:12px;font-size:14.5px}
   .hero-addr{display:none}
   .hero-cta{margin-top:16px;gap:10px;flex-wrap:nowrap}
@@ -377,6 +377,37 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
   .brand-n{font-size:15px}
   .hdr-book{padding:0 14px;font-size:14px}
 }
+/* ---------- очень узкая раскладка: телефон при увеличенном тексте (ширина окна ÷ масштаб ≤ 340) ----------
+   Пороги @media при «А+» пересчитываются движком под масштаб, поэтому эти правила включаются и на узких
+   телефонах без увеличения, и на обычных телефонах при 115–150 %: ничего не вылезает за край, без горизонтальной прокрутки. */
+@media (max-width:340px){
+  .hdr-in{padding:0 8px;gap:4px}
+  .hdr-book{display:none}
+  .brand-n{font-size:12px}
+  .tool-lang{padding:0 6px}
+  .bi{padding:8px 0}
+  .bi span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .svc-grid{grid-template-columns:1fr}
+  .hero-cta{flex-wrap:wrap}
+  .btn-glass{flex:1 1 100%}
+  .btn,.btn-sm{white-space:normal;line-height:1.2;padding-top:9px;padding-bottom:9px;text-align:center}
+  .rate-chip small{white-space:normal}
+  .rsum .btn{width:100%}
+  .foot .fl{display:flex;flex-wrap:wrap}
+  .modal{padding:10px}
+  .mbox{padding:18px 14px 14px}
+  .mbox h3{font-size:18px;overflow-wrap:anywhere}
+  .mhead{gap:10px}
+  .mhead .cic{display:none}
+  .mbox h3{overflow-wrap:break-word}
+  .hours-t{font-size:14px}
+  .hours-t td{padding:9px 3px}
+  .info-tabs button{padding:7px 10px}
+  .bk-inline{grid-template-columns:1fr}
+  .bk-inline .bk-opt{flex-direction:row;justify-content:flex-start;gap:12px;min-height:52px;padding:8px 14px;text-align:left}
+}
+/* колонки сеток не растягиваются под длинное слово или поле ввода: страница никогда не выходит за край */
+.svc-grid>*,.steps>*,.reviews>*,.faq>*,.contacts>*,.about>*,.mbox{min-width:0}
 @media (max-width:479px){
   :root{--hdr-h:56px}
   .bi{font-size:12px;letter-spacing:-.03em;padding:6px 0}
