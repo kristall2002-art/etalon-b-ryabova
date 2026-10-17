@@ -626,6 +626,22 @@ button.bk-opt{appearance:none;-webkit-appearance:none}
 .cb-actions{display:grid;grid-template-columns:auto 1fr;gap:10px;margin-top:4px}
 .cb-actions .btn{min-height:46px;padding:0 14px;font-size:14.5px;gap:8px}
 .cb-actions .btn span{white-space:normal;text-align:center;line-height:1.2}
+/* письмо на почту: адрес рядом с кнопкой «Скопировать адрес» (в окне и в сообщении после отправки) */
+.mail-line{display:flex;align-items:center;gap:6px 14px;flex-wrap:wrap;margin-top:4px;font-size:13.5px;color:var(--muted)}
+.mail-addr{display:inline-flex;align-items:center;gap:6px 12px;flex-wrap:wrap}
+.mail-addr b{color:var(--text);font-weight:600;font-size:14.5px;word-break:break-all}
+.mail-copy{padding:0 12px;font-size:13px;gap:6px}
+.mail-copy .ico{width:16px;height:16px}
+.mail-copy.done{border-color:var(--ok);color:var(--ok)}
+.fok .ok-t{display:block}
+.fok .mail-addr.in-ok{margin-top:8px}
+.fok .mail-addr b{color:inherit}
+.cb-actions.solo{grid-template-columns:1fr}
+.mbox-mail .fg{margin-top:10px}
+/* высокое окно (телефон): крестик остаётся на месте, прокручивается только форма */
+.mbox-mail{overflow:hidden;display:flex;flex-direction:column;padding:0}
+.mbox-mail #mailBox{overflow:auto;min-height:0;padding:26px 26px 22px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+@media (max-width:479px){.mbox-mail #mailBox{padding:18px 14px 14px}}
 .flipc .fok{display:none}
 .flipc .fok.show{display:block}
 @media (max-width:360px){.cb-actions{grid-template-columns:1fr}}
