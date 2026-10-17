@@ -29,7 +29,7 @@
 .sec:not(.sec-hero){background:#2b2319}
 .sec:not(.sec-hero) .sec-scroll{
   position:relative;z-index:1;
-  padding-top:calc(var(--hdr-h) + 12px);padding-bottom:calc(var(--bar-h) + 12px);
+  padding-top:calc(var(--hdr-h) / var(--zc,1) + 12px);padding-bottom:calc(var(--bar-h) + 12px);
   text-shadow:0 1px 2px rgba(0,0,0,.45)
 }
 .sec:not(.sec-hero) :is(input,select,textarea,button.btn,.btn){text-shadow:none}
@@ -321,19 +321,21 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
 /* ==========================================================================
    Адаптив
    ========================================================================== */
-@media (max-width:1439px){
+@media screen and (max-width:1439px){
   .hdr-tel{width:44px;padding:0;justify-content:center}
   .hdr-tel span{display:none}
   .hdr-tel:hover{background:rgba(255,255,255,.14)}
   .nav-a{padding:10px 9px}
 }
 /* на ноутбуках поуже телефон на плашке не помещается (он есть в нижней панели и в меню) */
-@media (max-width:1366px){.hdr-tel{display:none}}
-@media (max-width:860px){
+@media screen and (max-width:1366px){.hdr-tel{display:none}}
+@media screen and (max-width:860px){
   .hdr-a11y{display:none}
+}
+@media (max-width:860px){
   .mmenu .mm-tools{display:grid}
 }
-@media (max-width:1279px){
+@media screen and (max-width:1279px){
   .nav,.hdr-tel{display:none}
   .burger{display:grid}
   .hdr-book{display:inline-flex}
@@ -372,7 +374,7 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
 @media (max-width:767px){
   .dots{right:-15px}
 }
-@media (max-width:600px){
+@media screen and (max-width:600px){
   .hdr-in{padding:0 12px;gap:8px}
   .brand-n{font-size:15px}
   .hdr-book{padding:0 14px;font-size:14px}
@@ -380,11 +382,13 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
 /* ---------- очень узкая раскладка: телефон при увеличенном тексте (ширина окна ÷ масштаб ≤ 340) ----------
    Пороги @media при «А+» пересчитываются движком под масштаб, поэтому эти правила включаются и на узких
    телефонах без увеличения, и на обычных телефонах при 115–150 %: ничего не вылезает за край, без горизонтальной прокрутки. */
-@media (max-width:340px){
+@media screen and (max-width:340px){
   .hdr-in{padding:0 8px;gap:4px}
   .hdr-book{display:none}
   .brand-n{font-size:12px}
   .tool-lang{padding:0 6px}
+}
+@media (max-width:340px){
   .bi{padding:8px 0}
   .bi span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .svc-grid{grid-template-columns:1fr}
@@ -408,14 +412,16 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
 }
 /* колонки сеток не растягиваются под длинное слово или поле ввода: страница никогда не выходит за край */
 .svc-grid>*,.steps>*,.reviews>*,.faq>*,.contacts>*,.about>*,.mbox{min-width:0}
-@media (max-width:479px){
+@media screen and (max-width:479px){
   :root{--hdr-h:56px}
-  .bi{font-size:12px;letter-spacing:-.03em;padding:6px 0}
-  .bi span{overflow:visible;text-overflow:clip}
   .brand-t{display:flex}
   .brand{flex:1 1 0;min-width:0}
   .brand-s{font-size:9px;letter-spacing:.14em}
   .brand-n{font-size:12.5px;white-space:normal;line-height:1.12}
+}
+@media (max-width:479px){
+  .bi{font-size:12px;letter-spacing:-.03em;padding:6px 0}
+  .bi span{overflow:visible;text-overflow:clip}
   .mmenu .mmenu-foot .btn{flex:1 1 100%}
 }
 @media (max-height:700px) and (min-width:768px){
@@ -458,7 +464,7 @@ html[data-hc="1"] .hw,html[data-hc="1"] .hn{text-shadow:none}
 html[data-hc="1"] .btn-glass.btn-book *,html[data-hc="1"] .sec:not(.sec-hero) .btn-primary *{color:#000!important}
 
 /* язык виден и на телефоне (правка Сергея 17.10) */
-@media (max-width:700px){.tool-lang{padding:0 8px;gap:4px}.hdr-tools{gap:6px}}
+@media screen and (max-width:700px){.tool-lang{padding:0 8px;gap:4px}.hdr-tools{gap:6px}}
 
 /* ==========================================================================
    Материалы конторы (модалка): обычные абзацы и списки, ссылки внутри строки;
