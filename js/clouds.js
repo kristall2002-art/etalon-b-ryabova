@@ -155,7 +155,13 @@
   var speed = (mobile ? 3 : 1) * (reduced ? .5 : 1);
   var T0 = performance.now(), last = 0, raf = 0, ready = false;
 
-  function pageZoom() { return parseFloat(getComputedStyle(document.documentElement).zoom) || 1; }   /* А+: страница в CSS zoom */
+  /* А+: страница в CSS zoom, а первый экран — во встречном (css/etalon.css), так что итоговый масштаб экрана обычно 1;
+     считаем его честно, перемножив zoom всех предков */
+  function pageZoom() {
+    var z = 1;
+    for (var e = home || cv; e && e.nodeType === 1; e = e.parentElement) z *= parseFloat(getComputedStyle(e).zoom) || 1;
+    return z;
+  }
   function size() {
     var z = pageZoom();
     var w = Math.max(2, home ? home.clientWidth : innerWidth), h = Math.max(2, home ? home.clientHeight : innerHeight);

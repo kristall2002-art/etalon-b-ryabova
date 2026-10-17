@@ -1774,10 +1774,12 @@ html[data-hc="1"] :focus-visible{outline:3px solid #ffe14d;outline-offset:2px}
     /* на широком экране тоже поджимаем, но чуть-чуть: секция контактов бывает
        выше окна, и подвал уезжает под нижнюю плашку */
     /* при увеличенном тексте (А+) раздел не ужимается обратно: он прокручивается внутри себя */
-    var floor = fsNow > 1 ? 1 : (wide ? 0.8 : MIN_ZOOM);
+    var floor0 = fsNow > 1 ? 1 : (wide ? 0.8 : MIN_ZOOM);
     $$('.sec').forEach(function (sec) {
       var sc = $('.sec-scroll', sec), inner = sc && $('.wrap', sc);
       if (!sc || !inner) return;
+      /* первый экран А−/А+ не трогают: он всегда как при 100 % (окно — настоящее, без поправки на масштаб) */
+      var floor = sec.classList.contains('sec-hero') ? (window.innerWidth > 760 ? 0.8 : MIN_ZOOM) : floor0;
       var exempt = $$(TAP_EXEMPT_SEL, inner);
       function setExemptZoom(z) { exempt.forEach(function (e) { e.style.zoom = z; }); }
       inner.style.zoom = '';

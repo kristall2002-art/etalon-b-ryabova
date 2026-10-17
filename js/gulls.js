@@ -35,7 +35,8 @@
     W = Math.max(2, home.clientWidth); H = Math.max(2, home.clientHeight);
     mobile = W <= 768;
     BAND = Math.round(H * (mobile ? .40 : .46));
-    var z = parseFloat(getComputedStyle(document.documentElement).zoom) || 1;   /* А+: страница в CSS zoom */
+    var z = 1;   /* А+: страница в CSS zoom, первый экран — во встречном; итоговый масштаб экрана — произведение zoom предков */
+    for (var e = home; e && e.nodeType === 1; e = e.parentElement) z *= parseFloat(getComputedStyle(e).zoom) || 1;
     dpr = Math.min((window.devicePixelRatio || 1) * z, weak ? 1.5 : 2);
     var cw = Math.round(W * dpr), ch = Math.round(BAND * dpr);
     if (cv.width !== cw || cv.height !== ch) { cv.width = cw; cv.height = ch; }

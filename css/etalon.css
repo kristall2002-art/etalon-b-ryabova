@@ -112,7 +112,10 @@ html.js .sec-hero:not(.go) .rv{opacity:0;translate:0 18px;animation:heroSafe .01
 /* ==========================================================================
    Первый экран
    ========================================================================== */
-.sec-hero{background:#8fb1d4;color:#fff}
+.sec-hero{background:#8fb1d4;color:#fff;
+  /* А−/А+ первый экран не трогают: страница в zoom, экран — встречный zoom (как шапка), поэтому он на любой ступени
+     выглядит ровно как при 100 %. Единицы vw/vh и высота экрана считаются от окна без поправки. */
+  zoom:calc(1 / var(--zc,1)); --vwu:1vw; --vhu:1vh; --vh:calc(100 * var(--vhu))}
 .hero-bg{position:absolute;inset:0;overflow:hidden;background:#9db9d6 url(../img/hero-poster.jpg) 54% 50%/cover no-repeat}
 .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:54% 50%;background:transparent}
 .hero-clouds{
@@ -123,6 +126,8 @@ html.js .sec-hero:not(.go) .rv{opacity:0;translate:0 18px;animation:heroSafe .01
 .hero-clouds.on{opacity:1}
 /* угасание к низу рисует сам шейдер (js/clouds.js): маска на canvas — лишний проход на каждый кадр */
 .hero-clouds.baked{-webkit-mask-image:none;mask-image:none}
+/* точки-переходы по краю не растут с А+: иначе на ступенях 130–150 % они наезжают на плашки первого экрана и карточки */
+.dots{zoom:calc(1 / var(--zc,1))}
 
 .sec-hero .sec-scroll{position:relative;z-index:1;padding:26px clamp(20px,calc(3.4*var(--vwu,1vw)),64px);display:flex;flex-direction:column}
 .sec-hero .wrap{max-width:none;margin:auto 0}
@@ -357,7 +362,9 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
   .rate-chip .badge-r b{font-size:22px}
   .rate-chip .stars svg{width:14px;height:14px}
   .foot{padding:10px 14px}
-
+}
+/* первый экран: пороги настоящие (@media screen не пересчитывается под А+), он всегда как при 100 % */
+@media screen and (max-width:767px){
   .sec-hero .sec-scroll{padding:16px 14px calc(18px + env(safe-area-inset-bottom,0px))}
   .sec-hero .wrap{margin:auto 0 0}
   .hero-plq{--plq-pad:18px;width:100%;padding:18px 18px 20px;border-radius:22px}
@@ -394,9 +401,7 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
   .bi{padding:8px 0}
   .bi span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .svc-grid{grid-template-columns:1fr}
-  .hero-cta{flex-wrap:wrap}
-  .btn-glass{flex:1 1 100%}
-  .btn,.btn-sm{white-space:normal;line-height:1.2;padding-top:9px;padding-bottom:9px;text-align:center}
+  .btn:not(.btn-glass),.btn-sm:not(.btn-glass){white-space:normal;line-height:1.2;padding-top:9px;padding-bottom:9px;text-align:center}
   .rate-chip small{white-space:normal}
   .rsum .btn{width:100%}
   .foot .fl{display:flex;flex-wrap:wrap}
@@ -412,6 +417,11 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
   .bk-inline{grid-template-columns:1fr}
   .bk-inline .bk-opt{flex-direction:row;justify-content:flex-start;gap:12px;min-height:52px;padding:8px 14px;text-align:left}
 }
+/* первый экран при ширине ≤340 px: настоящие пороги (см. выше), как при 100 % */
+@media screen and (max-width:340px){
+  .hero-cta{flex-wrap:wrap}
+  .btn-glass{flex:1 1 100%;white-space:normal;line-height:1.2;padding-top:9px;padding-bottom:9px;text-align:center}
+}
 /* колонки сеток не растягиваются под длинное слово или поле ввода: страница никогда не выходит за край */
 .svc-grid>*,.steps>*,.reviews>*,.faq>*,.contacts>*,.about>*,.mbox{min-width:0}
 @media screen and (max-width:479px){
@@ -426,7 +436,7 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
   .bi span{overflow:visible;text-overflow:clip}
   .mmenu .mmenu-foot .btn{flex:1 1 100%}
 }
-@media (max-height:700px) and (min-width:768px){
+@media screen and (max-height:700px) and (min-width:768px){
   .hero-lead{display:none}
   .hero-cta{margin-top:16px}
 }
