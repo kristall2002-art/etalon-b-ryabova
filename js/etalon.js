@@ -93,6 +93,22 @@
   if (document.readyState === 'complete') setTimeout(loadBgs, 400);
   else window.addEventListener('load', function () { setTimeout(loadBgs, 500); });
 
+  /* ---------- карта Яндекса: грузим, когда экран «Контакты» уже на месте ----------
+     Виджет карты тянет скрипты и WebGL-плитки. С loading=lazy он начинал грузиться заранее, за несколько экранов,
+     и отнимал кадры у листания. Теперь адрес подставляется, когда «Контакты» открыты и переход закончился. */
+  var mapF = $('.map iframe[data-src]'), contactsSec = $('#contacts'), mapT = 0;
+  function mapCheck() {
+    if (!mapF || !mapF.getAttribute('data-src') || !contactsSec) return;
+    clearTimeout(mapT);
+    if (!contactsSec.classList.contains('active')) return;
+    mapT = setTimeout(function () {
+      if (!contactsSec.classList.contains('active') || !mapF.getAttribute('data-src')) return;
+      if (!mapF.offsetWidth) return;   /* на телефоне карта скрыта кнопкой — незачем её грузить */
+      mapF.src = mapF.getAttribute('data-src'); mapF.removeAttribute('data-src');
+    }, 900);
+  }
+  if (mapF) { new MutationObserver(mapCheck).observe(body, { attributes: true, attributeFilter: ['data-sec'] }); window.addEventListener('resize', mapCheck); mapCheck(); }
+
   /* ---------- мобильное меню: размер текста, контраст и тема — кнопки-«прокси» к настоящим кнопкам шапки ---------- */
   function syncProxy(b) {
     var t = $(b.getAttribute('data-proxy'));

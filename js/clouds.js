@@ -56,25 +56,36 @@
     '  vec2 sun=vec2(-.05,.075);',                   /* солнце сверху-слева */
     '  vec3 shade=vec3(.79,.85,.94),lite=vec3(1.,.992,.965);',
     '  vec4 acc=vec4(0.);',
+    /* Каждый слой гаснет к нижней границе (ea, eb, ec = 0 ниже своей отметки). Ниже неё слой ничего не вносит,
+       поэтому его не считаем вовсе: картинка та же, а работы у видеокарты втрое-вдвое меньше. */
     /* перистые: вытянутые, высокие, прозрачные */
-    '  vec2 a=layer(cuv,vec2(1.1,3.4),vec2(.0055,.0006),3.7,.52,.30,sun*vec2(1.6,.5),.5);',
-    '  float ea=1.-smoothstep(.10,.50,uv.y);',
-    '  float aa=min(a.x*ea*.40*uGain,.95);',
-    '  acc=vec4(mix(shade,lite,a.y)*aa,aa)+acc*(1.-aa);',
+    '  if(uv.y<.5){',
+    '    vec2 a=layer(cuv,vec2(1.1,3.4),vec2(.0055,.0006),3.7,.52,.30,sun*vec2(1.6,.5),.5);',
+    '    float ea=1.-smoothstep(.10,.50,uv.y);',
+    '    float aa=min(a.x*ea*.40*uGain,.95);',
+    '    acc=vec4(mix(shade,lite,a.y)*aa,aa)+acc*(1.-aa);',
+    '  }',
     /* средние кучевые */
-    '  vec2 b=layer(cuv,vec2(2.4,2.8),vec2(.0125,.0010),11.3,.52,.22,sun,.9);',
-    '  float eb=1.-smoothstep(.04,.40,uv.y);',
-    '  float ab=min(b.x*eb*.82*uGain,.97);',
-    '  acc=vec4(mix(shade,lite,b.y)*ab,ab)+acc*(1.-ab);',
+    '  if(uv.y<.4){',
+    '    vec2 b=layer(cuv,vec2(2.4,2.8),vec2(.0125,.0010),11.3,.52,.22,sun,.9);',
+    '    float eb=1.-smoothstep(.04,.40,uv.y);',
+    '    float ab=min(b.x*eb*.82*uGain,.97);',
+    '    acc=vec4(mix(shade,lite,b.y)*ab,ab)+acc*(1.-ab);',
+    '  }',
     /* ближние, крупные и быстрые */
-    '  vec2 c=layer(cuv,vec2(1.25,1.5),vec2(.0225,.0016),23.9,.54,.22,sun*1.4,1.1);',
-    '  float ec=1.-smoothstep(.0,.31,uv.y);',
-    '  float ac=min(c.x*ec*.92*uGain,.98);',
-    '  acc=vec4(mix(shade,lite,c.y)*ac,ac)+acc*(1.-ac);',
+    '  if(uv.y<.31){',
+    '    vec2 c=layer(cuv,vec2(1.25,1.5),vec2(.0225,.0016),23.9,.54,.22,sun*1.4,1.1);',
+    '    float ec=1.-smoothstep(.0,.31,uv.y);',
+    '    float ac=min(c.x*ec*.92*uGain,.98);',
+    '    acc=vec4(mix(shade,lite,c.y)*ac,ac)+acc*(1.-ac);',
+    '  }',
     /* вокруг купола облака редеют, чтобы не закрывать собор */
     '  vec2 hd=vec2((uv.x-uHole.x*uAsp)/uHole.z,(uv.y-uHole.y)/uHole.w);',
     '  float m=.10+.90*smoothstep(.55,1.25,length(hd));',
-    '  gl_FragColor=acc*m;',
+    /* плавное угасание к низу холста (раньше это делала CSS-маска на canvas — отдельный проход на каждый кадр) */
+    '  float yy=1.-f.y;',
+    '  float mk=1.-.45*clamp((yy-.36)/.30,0.,1.)-.55*clamp((yy-.66)/.34,0.,1.);',
+    '  gl_FragColor=acc*(m*mk);',
     '}'
   ].join('\n');
 
@@ -90,6 +101,7 @@
   gl.attachShader(pr, vs); gl.attachShader(pr, fs); gl.linkProgram(pr);
   if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) { cv.style.display = 'none'; return; }
   gl.useProgram(pr);
+  cv.classList.add('baked');   /* угасание уже в шейдере: CSS-маску canvas снимает .hero-clouds.baked */
 
   var buf = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, buf);
@@ -110,6 +122,34 @@
   /* частоты кадров кратны 60 Гц (30 / 20 / 15), иначе вместо 24 к/с получается 20 */
   var fps = reduced ? 15 : (mobile ? (weak ? 20 : 30) : 30);
   var frameMs = 1000 / fps - 4;
+  /* Общий метроном первого экрана: облака и чайки рисуют в одном и том же кадре, а не вразнобой. Каждое обновление
+     холста заставляет браузер заново размывать стекло плашки под ним; в один кадр — одно размытие вместо двух. */
+  var gate = { now: -1, on: false, last: -1e9 };
+  window.__heroFps = fps;
+  window.__heroGate = function (now) {
+    if (now === gate.now) return gate.on;           /* все rAF одного кадра получают одну и ту же метку времени */
+    gate.now = now; gate.on = now - gate.last >= 1000 / (window.__heroFps || fps) - 4;
+    if (gate.on) gate.last = now;
+    return gate.on;
+  };
+  /* Страховка для слабых устройств: если страница уже после вступления идёт медленнее ~24 к/с несколько секунд подряд,
+     облака упрощаются (сначала 20 к/с, затем меньше точек). На обычных устройствах это не срабатывает. */
+  var gov = { last: 0, ema: 16.7, slow: 0, step: 0, cool: 0 };
+  function govern(now) {
+    if (reduced || gov.step >= 3) return;
+    var d = gov.last ? now - gov.last : 16.7; gov.last = now;
+    if (d > 500) { gov.slow = 0; return; }           /* вкладка спала или первый кадр — не считаем */
+    gov.ema += (d - gov.ema) * .1;
+    if (now - T0 < 3500 || now < gov.cool) return;   /* вступление (слово, плашка, видео) — не показатель */
+    if (gov.ema > 44) {
+      if (!gov.slow) gov.slow = now;
+      else if (now - gov.slow > 1500) {
+        gov.step++; gov.slow = 0; gov.cool = now + 2000; gov.ema = 24;
+        if (gov.step === 1) { fps = Math.min(fps, 20); window.__heroFps = fps; }
+        else { scale *= .75; size(); draw(now); }
+      }
+    } else gov.slow = 0;
+  }
   /* скорость течения: на телефоне втрое больше (на узком экране при той же скорости в пикселях облака стоят),
      при «убрать анимации» вдвое меньше, но не нулевая */
   var speed = (mobile ? 3 : 1) * (reduced ? .5 : 1);
@@ -141,7 +181,8 @@
   }
   function loop(now) {
     raf = requestAnimationFrame(loop);
-    if (now - last < frameMs) return;
+    govern(now);
+    if (!window.__heroGate(now)) return;
     last = now;
     draw(now);
   }

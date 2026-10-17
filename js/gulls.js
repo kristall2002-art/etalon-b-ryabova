@@ -191,13 +191,15 @@
     ctx.globalAlpha = 1; ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
 
+  var blank = false;   /* холст уже пуст: небо без чаек не перерисовываем (иначе каждый кадр — зря обновлённый холст) */
   function loop(ts) {
     raf = requestAnimationFrame(loop);
-    if (ts - lastDraw < frameMs) return;
+    var G = window.__heroGate;   /* общий метроном из clouds.js: облака и чайки в одном кадре */
+    if (G ? !G(ts) : ts - lastDraw < frameMs) return;
     var dt = lastTs ? Math.min((ts - lastTs) / 1000, .1) : 0;
     lastTs = ts; lastDraw = ts;
     step(dt);
-    draw();
+    if (gulls.length || !blank) { draw(); blank = !gulls.length; }
   }
   function shouldRun() { return !document.hidden && document.body.getAttribute('data-sec') === '0'; }
   function sync() {
