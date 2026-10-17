@@ -1,0 +1,8 @@
+/* Вариант B: буквы «Нотариус» влетают по одной (js/title-b.js), как на первом экране сайта агентства.
+   Слово лежит в разметке всегда; скрипт лишь оборачивает буквы в span. */
+html.js .hw{opacity:0;animation:hwSafe .01s linear 6s forwards}
+html.js .hw.in{opacity:1}
+@keyframes hwSafe{to{opacity:1}}
+.hw .ch{display:inline-block;will-change:transform}
+@media (prefers-reduced-motion:reduce){html.js .hw{opacity:1;animation:none}}
+html[data-hc="1"] .hw{opacity:1!important}
