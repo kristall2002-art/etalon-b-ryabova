@@ -240,7 +240,34 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
 .sec:not(.sec-hero) .about-txt .quote{background:rgba(255,255,255,.09);border-left:3px solid rgb(var(--spot));border-radius:0 12px 12px 0;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none}
 .sec:not(.sec-hero) .about-txt .quote::after{display:none}
 .chips li{background:var(--glass);border-radius:999px}
-.creds .cred{padding:14px 16px}
+.creds .cred{padding:14px 16px;min-height:68px}
+.cred > div{min-width:0;flex:1 1 auto}
+
+/* ---------- «Оплата»: ровные значки ----------
+   Карточка занимает ту же ширину и высоту, что соседние. Если четыре значка помещаются в строку —
+   идут одним рядом от левого до правого края; иначе сетка 2×2 с одинаковыми колонками, а все карточки
+   «Реквизитов» выравниваются по высоте (grid-auto-rows:1fr). Размер решает ширина самой колонки
+   (container query), а не окна — поэтому одинаково на 1280, 1366, 1440, 1920, планшете и в режиме «А+». */
+.about-side{container:aside / inline-size}
+.pay-pills,.cred .pay-pills,.cl .pay-pills{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;width:100%;margin-top:3px
+}
+.pay-pill{
+  display:flex;align-items:center;justify-content:center;min-width:0;min-height:26px;padding:2px 8px;
+  font-size:12.5px;line-height:1.2;text-align:center;white-space:nowrap;box-sizing:border-box
+}
+.pay-pill .ico{display:none}
+.pay-pill.pay-logo{padding:2px 8px;min-height:26px}
+.pay-pill.pay-logo img{height:15px}
+.pay-pill.pay-logo img[src$="sbp.svg"]{height:17px}
+.creds .cred:has(.pay-pills){padding-top:10px;padding-bottom:10px}
+.creds .cred:has(.pay-pills) small{line-height:1.25}
+@container aside (min-width:405px){
+  .cred .pay-pills{grid-template-columns:repeat(4,auto);justify-content:space-between;max-width:430px}
+}
+@container aside (max-width:404px){
+  .creds{grid-auto-rows:1fr}
+}
 
 .steps::before{display:none}
 .steps{gap:14px;list-style:none;padding:0}
