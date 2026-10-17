@@ -439,8 +439,8 @@ body[data-sec="0"] .bar{transform:translateY(105%);opacity:0;visibility:hidden;p
 
 /* ==========================================================================
    Две темы (кнопка солнце/луна на плашке). По умолчанию data-theme="light" (как и было).
-   Светлая: светлое матовое стекло плашек, окна и формы светлые, текст тёмный, фото экранов
-   посветлены и приглушены лёгкой вуалью. Тёмная: глубокий почти чёрный фон, плотное тёмное стекло,
+   Светлая: светлое матовое стекло плашек, окна и формы светлые, текст тёмный; фон экранов — те же фото
+   с тем же затемнением 50 %, что и в тёмной базе. Тёмная: глубокий почти чёрный фон, плотное тёмное стекло,
    светлый текст, фото сильно затемнены. Первый экран (видео, облака, чайки, слово) читается в обеих:
    в светлой плашка светлая с тёмным текстом, в тёмной — тёмная со светлым.
    Выше (без data-theme) — базовый вид «тёмное стекло»; светлая тема переопределяет его ниже.
@@ -469,8 +469,6 @@ html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero),html[data-theme=
   --ok:#1d7443; --bad:#b0332a;
   color:#1b160e
 }
-html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero),html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) .sec-bg{background:#ece5d6}
-html[data-theme="light"]:not([data-hc="1"]) .sec-bg::after{background:rgba(250,246,238,.62)}
 html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) .sec-scroll{text-shadow:none}
 html[data-theme="light"]:not([data-hc="1"]) .glass,
 html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) :is(.sec-head,.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.quote,.ilink,.chips li,.foot,.rate-chip){
@@ -525,11 +523,8 @@ html[data-theme="light"]:not([data-hc="1"]) .mmenu .mm-row a.cur{color:#7a5718;b
 html[data-theme="light"]:not([data-hc="1"]) .mmenu .mm-tools{border-color:rgba(192,138,40,.5);background:rgba(70,50,15,.06)}
 html[data-theme="light"]:not([data-hc="1"]) .mmenu .mm-tools button{background:rgba(255,255,255,.7)}
 html[data-theme="light"]:not([data-hc="1"]) .mmenu .mm-tools button[aria-pressed="true"]{border-color:#c08a28;color:#5a3d0b;background:rgba(192,138,40,.2)}
-html[data-theme="light"]:not([data-hc="1"]) .dots button::after{background:#3a2d12;opacity:.5;box-shadow:0 0 0 1px rgba(255,255,255,.7)}
-html[data-theme="light"]:not([data-hc="1"]) .dots button.cur::after{background:rgb(var(--spot));opacity:1;box-shadow:0 0 0 1px rgba(90,65,25,.5)}
-html[data-theme="light"]:not([data-hc="1"]) body[data-sec="0"] .dots button::after{background:#fff;opacity:.7;box-shadow:0 0 0 1px rgba(0,0,0,.3)}
-html[data-theme="light"]:not([data-hc="1"]) body[data-sec="0"] .dots button.cur::after{background:rgb(var(--spot));opacity:1}
 /* содержимое экранов */
+html[data-theme="light"]:not([data-hc="1"]) .strong-lbl,html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) > .sec-scroll .about > div > .strong-lbl{color:rgba(255,255,255,.9);text-shadow:0 1px 2px rgba(0,0,0,.55)}
 html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) .kicker{color:#7a5718}
 html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) .kicker::before{background:#7a5718}
 html[data-theme="light"]:not([data-hc="1"]) .svc .cic,html[data-theme="light"]:not([data-hc="1"]) .cred .cic,html[data-theme="light"]:not([data-hc="1"]) .cl .cic,html[data-theme="light"]:not([data-hc="1"]) .mega-it .cic{background:rgba(122,87,24,.12);color:#5a3d0b}
