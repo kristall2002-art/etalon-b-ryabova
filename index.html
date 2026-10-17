@@ -1512,6 +1512,43 @@ html[data-hc="1"] :focus-visible{outline:3px solid #ffe14d;outline-offset:2px}
     }
     return infoLoading;
   }
+  /* Типографика текста материалов: союзы, предлоги и отдельные буквы не остаются в конце строки (неразрывный пробел),
+     тире не отрывается от слова, «ст. 35» и «№ 5» не рвутся; в длинные слова добавляются мягкие переносы,
+     чтобы текст «по ширине» не растягивался в рваные пробелы. */
+  var VOW = 'аеёиоуыэюя', START = ' бл бр вз вл вм вн вр гл гн гр дв дл дн др жд жм зв зд зл зн зр кл кн кр кс кт кв лг мн мг мл мс пл пн пр пс пт рв рд рж рт сб св сг сд сж сз ск см сн сп ср ст сх сч тв тк тл тр тс фл фр хл хр цв чв чт шк шл шн шт шв щр ';
+  function hyph(w) {
+    if (w.length < 7 || w === w.toUpperCase()) return w;
+    var lw = w.toLowerCase(), n = lw.length, cuts = [], i = 0, v;
+    function isV(k) { return VOW.indexOf(lw.charAt(k)) >= 0; }
+    while (i < n && !isV(i)) i++;                         // первая гласная
+    while (i < n) {
+      v = i; i++;
+      var s = i; while (i < n && !isV(i)) i++;            // согласные между гласными: s..i-1
+      if (i >= n) break;                                  // дальше гласных нет
+      var k = i - s;
+      if (k === 0) continue;                              // две гласные подряд: не переносим
+      var c1 = lw.charAt(s), c2 = lw.charAt(s + 1), cut;
+      if (k === 1) cut = (c1 === 'й' || c1 === 'ь' || c1 === 'ъ') ? s + 1 : s;
+      else if (c1 === 'й') cut = s + 1;                                           // ой|ти
+      else if (c2 === 'ь' || c2 === 'ъ') cut = s + 2;                             // каль|ций
+      else cut = START.indexOf(' ' + c1 + c2 + ' ') >= 0 ? s : s + 1;             // сочетание, с которого начинаются слова, уходит на новую строку целиком
+      if (cut >= 3 && n - cut >= 3) cuts.push(cut);
+    }
+    if (!cuts.length) return w;
+    var out = '', prev = 0;
+    cuts.forEach(function (c) { out += w.slice(prev, c) + '\u00AD'; prev = c; });
+    return out + w.slice(prev);
+  }
+  var NB = '\u00A0';
+  function typo(s, hy) {
+    s = String(s == null ? '' : s)
+      .replace(/(^|[\s(«„"])([А-Яа-яЁёA-Za-z]{1,2})\s+(?=\S)/g, function (m, a, w) { return a + w + NB; })
+      .replace(/(^|[\s(«„"])(для|при|без|над|под|про|или|как|что|так|еще|ещё|бы)\s+(?=\S)/gi, function (m, a, w) { return a + w + NB; })
+      .replace(/(^|[\s(])(ст|п|пп|ч|гл|г|№|кв|д|ул)\.?\s+(?=\d)/gi, function (m, a, w) { return a + w + (m.indexOf('.') >= 0 ? '.' : '') + NB; })
+      .replace(/\s+([–—-])\s+/g, NB + '$1 ');
+    if (hy) s = s.replace(/[А-Яа-яЁё]{7,}/g, hyph);
+    return s;
+  }
   function esch(v) { return String(v == null ? '' : v).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function infoHas(id) {
     var c = C();
@@ -1522,7 +1559,7 @@ html[data-hc="1"] :focus-visible{outline:3px solid #ffe14d;outline-offset:2px}
     if (id === 'pdn') return (((c.pdn || {}).paragraphs) || []).length > 0;
     return false;
   }
-  function pars(list) { return (list || []).map(function (p) { return '<p>' + esch(p) + '</p>'; }).join(''); }
+  function pars(list) { return (list || []).map(function (p) { return '<p>' + esch(typo(p, true)) + '</p>'; }).join(''); }
   function files(list) {
     return (list || []).map(function (f) {
       return '<a class="info-f" href="' + esch(f.url) + '" target="_blank" rel="noopener">' +
@@ -1531,7 +1568,7 @@ html[data-hc="1"] :focus-visible{outline:3px solid #ffe14d;outline-offset:2px}
   }
   function src() { return ''; }   // адрес страницы-источника остаётся в данных, но посетителю не показывается
   function acc(title, inner) {
-    return '<div class="info-i"><button type="button" aria-expanded="false"><span>' + esch(title) +
+    return '<div class="info-i"><button type="button" aria-expanded="false"><span>' + esch(typo(title, false)) +
       '</span><span class="pl"><svg class="ico"><use href="#ico-plus-s"/></svg></span></button><div>' + inner + '</div></div>';
   }
   function infoBody(id) {
@@ -1549,9 +1586,9 @@ html[data-hc="1"] :focus-visible{outline:3px solid #ffe14d;outline-offset:2px}
       out = (c.docs || []).map(function (d) {
         var inner = pars(d.intro ? [d.intro] : []);
         (d.sections || []).forEach(function (sec) {
-          if (sec.title) inner += '<h4>' + esch(sec.title) + '</h4>';
-          if (sec.text) inner += '<p>' + esch(sec.text) + '</p>';
-          if ((sec.items || []).length) inner += '<ul>' + sec.items.map(function (i) { return '<li>' + esch(i) + '</li>'; }).join('') + '</ul>';
+          if (sec.title) inner += '<h4>' + esch(typo(sec.title, false)) + '</h4>';
+          if (sec.text) inner += '<p>' + esch(typo(sec.text, true)) + '</p>';
+          if ((sec.items || []).length) inner += '<ul>' + sec.items.map(function (i) { return '<li>' + esch(typo(i, true)) + '</li>'; }).join('') + '</ul>';
         });
         return acc(d.title, inner + files(d.files) + src(d.source_url));
       }).join('');

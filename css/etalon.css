@@ -459,3 +459,23 @@ html[data-hc="1"] .btn-glass.btn-book *,html[data-hc="1"] .sec:not(.sec-hero) .b
 
 /* язык виден и на телефоне (правка Сергея 17.10) */
 @media (max-width:700px){.tool-lang{padding:0 8px;gap:4px}.hdr-tools{gap:6px}}
+
+/* ==========================================================================
+   Материалы конторы (модалка): обычные абзацы и списки, ссылки внутри строки;
+   текст по ширине с переносами слов (мягкие переносы ставит js, hyphens:auto — запас).
+   На телефоне — по левому краю с переносами, чтобы не было «рек» из больших пробелов.
+   ========================================================================== */
+.info-i > div{display:none}
+.info-i.open > div{display:block}
+.info-i p,.info-i li{
+  display:block;margin:0 0 10px;text-align:justify;text-justify:inter-word;
+  -webkit-hyphens:auto;hyphens:auto;hyphenate-limit-chars:7 3 3;overflow-wrap:break-word;word-break:normal
+}
+.info-i li{display:list-item;margin:0 0 5px}
+.info-i a:not(.info-f),.info-i b,.info-i strong,.info-i em,.info-i span{display:inline;margin:0;padding:0}
+.info-i a:not(.info-f){color:var(--accent-d);text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere;word-break:break-all}
+.info-i p:has(> b){text-align:left}
+.info-i h4,.info-i > button span:first-child{text-align:left;hyphens:manual}
+@media (max-width:480px){
+  .info-i p,.info-i li{text-align:left}
+}
