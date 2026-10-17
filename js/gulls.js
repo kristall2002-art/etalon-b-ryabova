@@ -1,6 +1,6 @@
 /* Чайки над видео первого экрана.
-   Две-четыре небольшие белые чайки проплывают по небу плавными дугами на разной высоте и с разной скоростью:
-   несколько взмахов, потом планирование; иногда небо пустеет. Рисуются на canvas 2D (никаких библиотек и запросов),
+   Две-четыре небольшие чайки проплывают по небу плавными дугами на разной высоте и с разной скоростью:
+   несколько взмахов, потом планирование, лёгкий крен на поворотах; иногда небо пустеет. Рисуются на canvas 2D (никаких библиотек и запросов),
    лежат под плашкой с текстом и сами обходят её: высота полёта пересчитывается так, чтобы чайка всегда
    оставалась выше плашки, а на телефоне держится в верхней части неба. Идут только пока виден первый экран и
    вкладка активна. На слабых телефонах чаек меньше; при prefers-reduced-motion летит одна, медленно. */
@@ -71,20 +71,20 @@
       S: S, dir: dir, v: v, x: x, x0: x,
       ub: rnd(.12, .85), ua: rnd(.07, .17), lam: rnd(.9, 1.7) * (mobile ? W * 1.1 : W * .55), ph0: rnd(0, TAU),
       alpha: .72 + .28 * big, phase: rnd(0, TAU), amp: 0, mode: 0, left: rnd(.4, 1.2),
-      freq: rnd(2.3, 3.4) * (reduced ? .55 : 1), t: 0, fade: 0
+      freq: rnd(2.0, 2.9) * (reduced ? .55 : 1), t: 0, fade: 0
     });
   }
 
   function schedule() {
     /* группа из 1-3 чаек, потом пауза; иногда подолгу пусто */
     var r = Math.random();
-    nextSpawn = clock + (r < .3 ? rnd(9, 15) : rnd(3, 7)) * (reduced ? 1.6 : 1);
+    nextSpawn = clock + (r < .3 ? rnd(11, 18) : rnd(4.5, 9)) * (reduced ? 1.6 : 1);
   }
 
   function step(dt) {
     clock += dt;
     if (clock >= nextSpawn) {
-      var n = reduced ? 1 : (Math.random() < .55 ? 1 : (Math.random() < .7 ? 2 : 3));
+      var rr = Math.random(), n = reduced ? 1 : (rr < .62 ? 1 : (rr < .9 ? 2 : 3));
       n = Math.min(n, maxGulls - gulls.length);
       var d0 = Math.random() < .5 ? 1 : -1;
       for (var i = 0; i < n; i++) spawn(d0, i * rnd(70, 170));
@@ -106,51 +106,86 @@
     }
   }
 
-  /* одно крыло в единицах размаха (S = 1); f: 1 — крыло вверх, -1 — вниз */
-  function wing(f) {
-    var ex = .25, ey = -(.065 + .15 * f);
-    var tx = .5 * (1 - .13 * Math.abs(f)), ty = .04 - .30 * f - .02;
-    ctx.beginPath();
-    ctx.moveTo(0, -.012);
-    ctx.quadraticCurveTo(ex * .85, ey - .055, tx, ty);
-    ctx.quadraticCurveTo(ex + .03, ey + .075 + .02 * (1 - f), .02, .05);
+  /* ---------- форма чайки ----------
+     Упрощённая 3D-модель: тело, голова с клювом, хвост, крыло из двух звеньев (плечо и кисть с изгибом в «запястье»),
+     вид с трёх четвертей снизу. Кончики крыльев чёрные, верх крыла светло-серый, снизу мягкая тень.
+     Координаты птицы: x вперёд, y вверх, z к зрителю; единица длины — размах крыльев. */
+  var AZ = -.62, EL = .2, CA = Math.cos(AZ), SA = Math.sin(AZ), CE = Math.cos(EL), SE = Math.sin(EL);
+  var PX = 0, PY = 0;
+  function pr(x, y, z) { PX = x * CA + z * SA; PY = -y * CE - (z * CA - x * SA) * SE; }
+  function arm(len, sweep, phi) {            /* звено: назад на sweep, вверх на угол phi */
+    var n = Math.sqrt(sweep * sweep + 1);
+    return [-sweep / n * len, Math.sin(phi) / n * len, Math.cos(phi) / n * len];
+  }
+  var LX = [], LY = [], TX = [], TY = [];
+  function wing(s, a, h, fill, tip, shade, mono) {
+    var sh = [.05, 0, .035 * s], A = arm(.2, .16, a), H = arm(.3, .5, h);
+    A[2] *= s; H[2] *= s;
+    var W = [sh[0] + A[0], sh[1] + A[1], sh[2] + A[2]], T = [W[0] + H[0], W[1] + H[1], W[2] + H[2]];
+    var C = [2 * W[0] - (sh[0] + T[0]) / 2, 2 * W[1] - (sh[1] + T[1]) / 2, 2 * W[2] - (sh[2] + T[2]) / 2];
+    var N = 9, i, u, q, x, y, z, ch;
+    for (i = 0; i <= N; i++) {
+      u = i / N; q = 1 - u;
+      x = q * q * sh[0] + 2 * q * u * C[0] + u * u * T[0];
+      y = q * q * sh[1] + 2 * q * u * C[1] + u * u * T[1];
+      z = q * q * sh[2] + 2 * q * u * C[2] + u * u * T[2];
+      ch = .03 + .22 * Math.pow(q, 1.15) * (1 + .55 * Math.sin(u * 3.14));   /* хорда сужается к кончику */
+      pr(x, y, z); LX[i] = PX; LY[i] = PY;
+      pr(x - ch, y - ch * .1 - .006, z); TX[i] = PX; TY[i] = PY;
+    }
+    ctx.beginPath(); ctx.moveTo(LX[0], LY[0]);
+    for (i = 1; i <= N; i++) ctx.lineTo(LX[i], LY[i]);
+    for (i = N; i >= 0; i--) ctx.lineTo(TX[i], TY[i]);
     ctx.closePath();
+    if (mono) { ctx.fillStyle = mono; ctx.fill(); return; }
+    var gr = ctx.createLinearGradient(0, Math.min(LY[N], LY[0]) - .02, 0, Math.max(TY[0], TY[N]) + .02);
+    gr.addColorStop(0, fill); gr.addColorStop(1, shade);
+    ctx.fillStyle = gr; ctx.fill();
+    ctx.beginPath(); ctx.moveTo(LX[7], LY[7]);
+    for (i = 8; i <= N; i++) ctx.lineTo(LX[i], LY[i]);
+    for (i = N; i >= 7; i--) ctx.lineTo(TX[i], TY[i]);
+    ctx.closePath(); ctx.fillStyle = tip; ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc((LX[8] + TX[8]) / 2, (LY[8] + TY[8]) / 2, .007, 0, TAU); ctx.fill();   /* белое пятнышко на чёрном */
+  }
+  function body(mono) {
+    pr(-.14, 0, .03); var x1 = PX, y1 = PY; pr(-.3, -.008, .05); var x2 = PX, y2 = PY; pr(-.3, -.008, -.05); var x3 = PX, y3 = PY; pr(-.14, 0, -.03); var x4 = PX, y4 = PY;
+    ctx.fillStyle = mono || '#e6eaee';
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.lineTo(x3, y3); ctx.lineTo(x4, y4); ctx.closePath(); ctx.fill();   /* хвост */
+    pr(0, 0, 0); var cx = PX, cy = PY;
+    if (mono) ctx.fillStyle = mono;
+    else { var gr = ctx.createLinearGradient(0, cy - .05, 0, cy + .06); gr.addColorStop(0, '#fff'); gr.addColorStop(1, '#d3dae1'); ctx.fillStyle = gr; }
+    ctx.beginPath(); ctx.ellipse(cx - .005, cy + .006, .185, .045, -.04, 0, TAU); ctx.fill();
+    pr(.235, .014, 0); var hx = PX, hy = PY;
+    ctx.fillStyle = mono || '#fff'; ctx.beginPath(); ctx.ellipse(hx, hy, .046, .034, 0, 0, TAU); ctx.fill();
+    if (!mono) {
+      ctx.fillStyle = '#e9b43a'; ctx.beginPath(); ctx.moveTo(hx + .035, hy - .008); ctx.lineTo(hx + .09, hy + .006); ctx.lineTo(hx + .035, hy + .016); ctx.closePath(); ctx.fill();
+    }
+  }
+  /* a, h — углы плеча и кисти, bank — крен (дальнее крыло ниже, ближнее выше) */
+  function gullShape(a, h, bank, mono) {
+    wing(-1, a - bank, h - bank, '#d9dfe5', '#2b2f35', '#bcc5ce', mono);
+    body(mono);
+    wing(1, a + bank, h + bank, '#fbfcfd', '#23272c', '#d5dce3', mono);
   }
 
-  var shade = null;
   function draw() {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, cv.width, cv.height);
-    if (!gulls.length) return;
-    if (!shade) {
-      shade = ctx.createLinearGradient(0, -.2, 0, .12);
-      shade.addColorStop(0, 'rgba(255,255,255,1)');
-      shade.addColorStop(.55, 'rgba(248,251,255,1)');
-      shade.addColorStop(1, 'rgba(186,198,216,1)');           /* мягкая серая тень на крыле снизу */
-    }
     for (var i = 0; i < gulls.length; i++) {
-      var g = gulls[i], S = g.S;
-      var f = g.amp * Math.sin(g.phase) + (1 - g.amp) * (.16 + .08 * Math.sin(g.t * 1.1 + g.ph0));
-      var y = yAt(g, g.x) - g.amp * Math.sin(g.phase) * S * .05;
-      var slope = (yAt(g, g.x + 6 * g.dir) - yAt(g, g.x - 6 * g.dir)) / 12;   /* наклон по траектории */
-      var tilt = clamp(Math.atan(slope) * .5, -.3, .3);
-      ctx.setTransform(dpr * S, 0, 0, dpr * S, g.x * dpr, y * dpr);
-      ctx.rotate(tilt);
+      var g = gulls[i], K = g.S * 1.45, sp = Math.sin(g.phase), sq = Math.sin(g.phase - .75), gl = Math.sin(g.t * 1.1 + g.ph0);
+      var m = g.amp, gm = 1 - m;
+      /* взмах: плечо ходит вверх-вниз, кисть запаздывает и сильнее изгибается; в планировании — «чаячье крыло» с изломом */
+      var a = gm * (.5 + .06 * gl) + m * (.18 + .62 * sp);
+      var hh = gm * (.0 + .07 * gl) + m * (-.08 + .8 * sq);
+      var y = yAt(g, g.x) - m * sp * K * .05;
+      var s1 = (yAt(g, g.x + 8 * g.dir) - yAt(g, g.x)) / 8, s2 = (yAt(g, g.x + 24 * g.dir) - yAt(g, g.x + 16 * g.dir)) / 8;
+      var tilt = clamp(Math.atan(s1) * .45, -.3, .3), bank = clamp((s2 - s1) * g.dir * 9, -.3, .3);   /* наклон по траектории и крен на повороте */
       ctx.globalAlpha = g.alpha * g.fade;
-      /* тень-ореол: чайка не теряется на светлых облаках */
-      ctx.save(); ctx.translate(.012, .045); ctx.fillStyle = 'rgba(45,65,100,.2)';
-      wing(f); ctx.fill(); ctx.scale(-1, 1); wing(f); ctx.fill();
-      ctx.beginPath(); ctx.ellipse(0, .01, .1, .045, 0, 0, TAU); ctx.fill(); ctx.restore();
-      /* крылья */
-      ctx.fillStyle = shade;
-      wing(f); ctx.fill();
-      ctx.save(); ctx.scale(-1, 1); wing(f); ctx.fill(); ctx.restore();
-      /* корпус, хвост и голова по ходу полёта */
-      ctx.fillStyle = '#fff';
-      ctx.beginPath(); ctx.ellipse(-g.dir * .015, .012, .1, .04, 0, 0, TAU); ctx.fill();
-      ctx.beginPath(); ctx.ellipse(g.dir * .085, .002, .035, .028, 0, 0, TAU); ctx.fill();
-      ctx.fillStyle = 'rgba(255,196,92,.9)';
-      ctx.beginPath(); ctx.moveTo(g.dir * .11, -.002); ctx.lineTo(g.dir * .15, .008); ctx.lineTo(g.dir * .11, .014); ctx.fill();
+      /* мягкая тень-ореол: чайка не теряется на светлых облаках */
+      ctx.setTransform(dpr * K * g.dir, 0, 0, dpr * K, (g.x + .012 * K * g.dir) * dpr, (y + .035 * K) * dpr);
+      ctx.rotate(tilt * g.dir); gullShape(a, hh, bank, 'rgba(45,65,100,.2)');
+      ctx.setTransform(dpr * K * g.dir, 0, 0, dpr * K, g.x * dpr, y * dpr);
+      ctx.rotate(tilt * g.dir); gullShape(a, hh, bank, null);
     }
     ctx.globalAlpha = 1; ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
