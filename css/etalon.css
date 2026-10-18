@@ -759,3 +759,17 @@ html[data-hc="1"] .cred b a{color:#ffe14d}
 .off a:hover{color:var(--text)}
 html[data-hc="1"] .off a{color:#ffe14d}
 .off p,.off h4{overflow-wrap:break-word}
+
+/* ==========================================================================
+   Б-4, Б-9: строка о передаче данных у форм со ссылкой на Политику; владелец сайта в подвале
+   ========================================================================== */
+.pd-note{margin:8px 0 0;font-size:12.5px;line-height:1.45;color:var(--muted)}
+.pd-note a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.pd-note a:hover{color:#ffe2a8}
+html[data-theme="light"]:not([data-hc="1"]) .pd-note a:hover{color:#7a5718}
+.mbox .pd-note a{color:var(--accent-d)}
+.mbox .pd-note a:hover{color:var(--text)}
+html[data-hc="1"] .pd-note,html[data-hc="1"] .foot-owner{color:#fff;opacity:1}
+html[data-hc="1"] .pd-note a{color:#ffe14d}
+.foot-owner{margin-top:.5em;font-size:13px;line-height:1.45;opacity:.85}
+.pd-note,.foot-owner{overflow-wrap:anywhere}
