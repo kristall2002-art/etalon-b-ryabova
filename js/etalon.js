@@ -12,10 +12,10 @@
   var body = document.body;
 
   /* ---------- Spotlight Card ---------- */
-  var SEL = '.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.sec-head,.ilink,.rate-chip,.hero-plq,.btn-glass';
+  var SEL = '.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.tf-card,.sec-head,.ilink,.rate-chip,.hero-plq,.btn-glass';
   $$(SEL).forEach(function (el) { el.classList.add('glow'); });
   // крупные плашки подпрыгивают на нижней границе диапазона (1,03)
-  $$('.hero-plq,.about-txt,.sec-head,.cbox').forEach(function (el) { el.style.setProperty('--tap', '1.03'); });
+  $$('.hero-plq,.about-txt,.tf-card,.sec-head,.cbox').forEach(function (el) { el.style.setProperty('--tap', '1.03'); });
 
   function chainOf(t) {
     var out = [], el = t && t.closest ? t.closest('.glow') : null;

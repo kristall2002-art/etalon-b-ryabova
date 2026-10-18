@@ -45,7 +45,7 @@
    Жидкое стекло
    ========================================================================== */
 .glass,
-.sec:not(.sec-hero) :is(.sec-head,.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.quote,.ilink,.chips li,.foot,.rate-chip){
+.sec:not(.sec-hero) :is(.sec-head,.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.tf-card,.quote,.ilink,.chips li,.foot,.rate-chip){
   position:relative;isolation:isolate;
   background:var(--glass);
   -webkit-backdrop-filter:blur(var(--glass-blur));backdrop-filter:blur(var(--glass-blur));
@@ -54,7 +54,7 @@
 }
 /* тонкая светлая рамка-градиент; рядом с курсором рамка разгорается (--hl, --x, --y) */
 .glass::after,
-.sec:not(.sec-hero) :is(.sec-head,.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.quote,.ilink,.chips li,.foot,.rate-chip)::after{
+.sec:not(.sec-hero) :is(.sec-head,.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.tf-card,.quote,.ilink,.chips li,.foot,.rate-chip)::after{
   content:"";position:absolute;inset:0;border-radius:inherit;padding:1.4px;pointer-events:none;z-index:2;
   background:
     radial-gradient(230px circle at var(--x,50%) var(--y,50%),rgba(255,226,160,calc(var(--hl,0)*1)),rgba(var(--spot),calc(var(--hl,0)*.65)) 38%,transparent 72%),
@@ -101,7 +101,7 @@ html[data-theme="light"]{--gy-ring:232,154,0;--gy-glow:255,186,30}
 @keyframes cGlowTap{0%{box-shadow:var(--gy0)}14%,62%{box-shadow:var(--gy)}100%{box-shadow:var(--gy0)}}
 html[data-hc="1"] #contacts .glow:hover{outline:3px solid #ffd400;outline-offset:2px}
 /* крупные плашки берут нижнюю границу 1,03: 3,5 % от 600 px — это уже 20 px */
-.hero-plq,.about-txt,.sec-head,.cbox{--hov:1.03}
+.hero-plq,.about-txt,.tf-card,.sec-head,.cbox{--hov:1.03}
 
 /* касание на телефоне: вспышка пятна в точке касания и подпрыгивание */
 .glow.tap{animation:glowTap .62s var(--spring),glowHl .62s ease-out}
@@ -509,11 +509,11 @@ html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero),html[data-theme=
 }
 html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) .sec-scroll{text-shadow:none}
 html[data-theme="light"]:not([data-hc="1"]) .glass,
-html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) :is(.sec-head,.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.quote,.ilink,.chips li,.foot,.rate-chip){
+html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) :is(.sec-head,.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.tf-card,.quote,.ilink,.chips li,.foot,.rate-chip){
   box-shadow:0 8px 28px rgba(70,50,15,.16),inset 0 1px 0 rgba(255,255,255,.8)
 }
 html[data-theme="light"]:not([data-hc="1"]) .glass::after,
-html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) :is(.sec-head,.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.quote,.ilink,.chips li,.foot,.rate-chip)::after{
+html[data-theme="light"]:not([data-hc="1"]) .sec:not(.sec-hero) :is(.sec-head,.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.tf-card,.quote,.ilink,.chips li,.foot,.rate-chip)::after{
   background:
     radial-gradient(230px circle at var(--x,50%) var(--y,50%),rgba(214,150,40,calc(var(--hl,0)*1)),rgba(var(--spot),calc(var(--hl,0)*.7)) 38%,transparent 72%),
     linear-gradient(160deg,rgba(255,255,255,.95) 0%,rgba(120,88,30,.22) 28%,rgba(120,88,30,.12) 62%,rgba(255,255,255,.9) 100%)
@@ -589,10 +589,10 @@ html[data-theme="light"]:not([data-hc="1"]) .pay-pill:not(.pay-logo){background:
 html[data-hc="1"] .sec:not(.sec-hero){background:#000}
 html[data-hc="1"] .sec-hero{background:#000}
 html[data-hc="1"] .glass,html[data-hc="1"] .hdr,html[data-hc="1"] .bar,html[data-hc="1"] .mmenu,html[data-hc="1"] .btn-glass,
-html[data-hc="1"] .sec:not(.sec-hero) :is(.sec-head,.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.quote,.ilink,.chips li,.foot,.rate-chip){
+html[data-hc="1"] .sec:not(.sec-hero) :is(.sec-head,.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.tf-card,.quote,.ilink,.chips li,.foot,.rate-chip){
   background:#000!important;border:2px solid #fff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}
 html[data-hc="1"] .glass::after,html[data-hc="1"] .glow::before,html[data-hc="1"] .hdr::after,html[data-hc="1"] .bar::before,
-html[data-hc="1"] .sec:not(.sec-hero) :is(.sec-head,.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.quote,.ilink,.chips li,.foot,.rate-chip)::after{display:none!important}
+html[data-hc="1"] .sec:not(.sec-hero) :is(.sec-head,.svc,.step,.rev,.rsum,.cred,.cbox,.fq,.about-txt,.tf-card,.quote,.ilink,.chips li,.foot,.rate-chip)::after{display:none!important}
 html[data-hc="1"] .hero-clouds,html[data-hc="1"] .hero-gulls,html[data-hc="1"] .sd-canvas,html[data-hc="1"] .hero-video{display:none!important}
 html[data-hc="1"] .btn-glass.btn-book,html[data-hc="1"] .hdr .btn-primary,html[data-hc="1"] .sec:not(.sec-hero) .btn-primary{background:#ffe14d!important;color:#000!important}
 html[data-hc="1"] .hw,html[data-hc="1"] .hn{text-shadow:none}
@@ -692,3 +692,51 @@ html:not([lang="ru"]) :is(.svc,.step,.rev,.cred,.fq,.cbox,.sec-head,.chips li,.r
 .map-actions .btn{flex:1 1 9.5em}   /* короткие подписи (китайский) не схлопываются до буквы в столбик: на узкой плашке кнопки встают друг под другом */
 html:not([lang="ru"]) :is(.rsum,.map-actions) .btn span{overflow-wrap:anywhere}
 html:not([lang="ru"]) .rsum .btn{white-space:normal;text-align:center;line-height:1.25;padding-top:9px;padding-bottom:9px}
+
+/* ==========================================================================
+   Тарифы и льготы (п. 3.1.5–3.1.8 Стандартов ФНП): таблица, расчёт, льготы, источники.
+   Цвета — от родителя (светлая/тёмная тема, режим для слабовидящих); на телефоне строки таблицы встают в столбик.
+   ========================================================================== */
+.tf{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:20px;align-items:start}
+.tf-col{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;min-width:0}
+.tf-card{padding:18px 22px;--tf-line:rgba(255,255,255,.26);container:tfc / inline-size}
+.tf-card h3{margin:0 0 10px;font-size:17px;line-height:1.3;font-weight:600}
+.tf-card p{margin:0 0 10px;font-size:14.5px;line-height:1.5}
+.tf-card p:last-child,.tf-card ul:last-child{margin-bottom:0}
+.tf-card a{color:#f6e6bd;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+.tf-card a:hover{color:#ffe2a8}
+.tf-card .tf-note{font-size:13.5px;line-height:1.45;opacity:.92}
+.tf-t{width:100%;border-collapse:collapse;font-size:14.5px;line-height:1.42}
+.tf-t th,.tf-t td{padding:9px 12px 9px 0;text-align:left;vertical-align:top;border-bottom:1px solid var(--tf-line);overflow-wrap:break-word}
+.tf-t th:last-child,.tf-t td:last-child{padding-right:0}
+.tf-t thead th{padding-top:2px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;opacity:.88}
+.tf-t tbody th{width:31%;font-weight:600}
+.tf-t td{width:34.5%}
+.tf-v b{font-weight:600;white-space:nowrap}
+.tf-lbl{display:none}
+.tf-list{margin:0 0 12px;padding-left:18px;list-style:disc}
+.tf-list li{margin:0 0 8px;font-size:14.5px;line-height:1.45;overflow-wrap:break-word}
+.tf-more{margin-top:12px;padding-top:4px;border-top:1px solid var(--tf-line)}
+.tf-more summary{cursor:pointer;display:flex;align-items:center;min-height:44px;font-weight:600;font-size:14.5px}
+.tf-more h4{margin:12px 0 4px;font-size:14px;font-weight:600}
+.tf-more p{margin:0 0 6px}
+.tf-card :focus-visible{outline:3px solid #ffe2a8;outline-offset:2px;border-radius:4px}
+html[data-theme="light"]:not([data-hc="1"]) .tf-card{--tf-line:rgba(70,50,15,.24)}
+html[data-theme="light"]:not([data-hc="1"]) .tf-card a{color:#7a5718}
+html[data-theme="light"]:not([data-hc="1"]) .tf-card a:hover{color:#5a3d0b}
+html[data-theme="light"]:not([data-hc="1"]) .tf-card :focus-visible{outline-color:#a06a10}
+html[data-hc="1"] .tf-card{--tf-line:#fff}
+html[data-hc="1"] .tf-card a{color:#ffe14d}
+@media (max-width:991px){.tf{grid-template-columns:1fr}}
+@media (max-width:640px){
+  .tf-card{padding:14px 16px}
+  .tf-t,.tf-t tbody,.tf-t tr,.tf-t th,.tf-t td{display:block;width:auto}
+  .tf-t thead{display:none}
+  .tf-t tr{padding-bottom:8px;border-bottom:1px solid var(--tf-line)}
+  .tf-t tbody th{width:auto;padding:10px 0 4px;border-bottom:0;font-size:15px}
+  .tf-t td{display:flex;gap:10px;align-items:baseline;padding:3px 0;border-bottom:0}
+  .tf-lbl{display:block;flex:0 0 9.4em;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.78}
+  .tf-t td .tf-v{flex:1 1 auto;min-width:0;overflow-wrap:anywhere}
+}
+@container tfc (max-width:300px){.tf-t td{display:block}.tf-lbl{margin-bottom:1px}}
+html:not([lang="ru"]) .tf-card :is(h3,p,li,th,td,summary){overflow-wrap:break-word}
