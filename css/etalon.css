@@ -740,3 +740,22 @@ html[data-hc="1"] .tf-card a{color:#ffe14d}
 }
 @container tfc (max-width:300px){.tf-t td{display:block}.tf-lbl{margin-bottom:1px}}
 html:not([lang="ru"]) .tf-card :is(h3,p,li,th,td,summary){overflow-wrap:break-word}
+
+/* ==========================================================================
+   Б-6: ссылки в плашках «О нотариусе» и окно «Официальные сведения и ссылки»
+   ========================================================================== */
+.cred b a{color:inherit;text-decoration:underline;text-decoration-color:rgba(255,255,255,.5);text-underline-offset:3px}
+.cred b a:hover{color:#ffe2a8;text-decoration-color:#ffe2a8}
+html[data-theme="light"]:not([data-hc="1"]) .cred b a{text-decoration-color:rgba(70,50,15,.45)}
+html[data-theme="light"]:not([data-hc="1"]) .cred b a:hover{color:#7a5718;text-decoration-color:#7a5718}
+html[data-hc="1"] .cred b a{color:#ffe14d}
+.about-side .about-more{justify-content:flex-start;margin-top:12px}
+.off{margin-top:12px;display:grid;gap:14px}
+.off h4{margin:0 0 4px;font-size:15px;font-weight:600;line-height:1.35}
+.off p{margin:0;font-size:14px;line-height:1.5;color:var(--muted)}
+.off-links{margin:6px 0 0;padding-left:18px;list-style:disc}
+.off-links li{margin:0 0 5px;font-size:14px;line-height:1.4;overflow-wrap:anywhere}
+.off a{color:var(--accent-d);text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+.off a:hover{color:var(--text)}
+html[data-hc="1"] .off a{color:#ffe14d}
+.off p,.off h4{overflow-wrap:break-word}
